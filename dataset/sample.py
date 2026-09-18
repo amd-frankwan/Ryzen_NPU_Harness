@@ -3,7 +3,7 @@ import requests
 from pycocotools.coco import COCO
 
 # Initialize COCO API
-annFile = "annotations/instances_val2017.json"
+annFile = "./annotations/instances_val2017.json"
 coco = COCO(annFile)
 
 # Get 100 random image IDs

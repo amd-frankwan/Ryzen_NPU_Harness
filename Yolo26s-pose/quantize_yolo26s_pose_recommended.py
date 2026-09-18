@@ -36,7 +36,7 @@ from quark.onnx.quantization.config import Config, get_default_config
 
 FLOAT_MODEL = "yolo26s-pose.onnx"
 QUANT_MODEL = "yolo26s-pose_int8_headfp.onnx"
-CALIB_DIR = "/host_mount/coco2017/calib100"
+CALIB_DIR = "./coco20"
 
 
 class YOLO26PoseDataReader(CalibrationDataReader):
@@ -53,12 +53,11 @@ class YOLO26PoseDataReader(CalibrationDataReader):
             return None
         img = cv2.imread(self.files[self.idx])
         self.idx += 1
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img, (640, 640))
-        img = img.astype(np.float32)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = np.transpose(img, (2, 0, 1))
+        img = np.ascontiguousarray(img, dtype=np.float32) / 255.0      
         img = np.expand_dims(img, 0)
-        img = img / 255.0
         return {"images": img}
 
     def rewind(self):
